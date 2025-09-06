@@ -1,4 +1,4 @@
-# Use an official OpenJDK image
+# Use an official OpenJDK 21 image
 FROM eclipse-temurin:21-jdk-jammy
 
 # Set working directory inside container
@@ -17,8 +17,8 @@ RUN chmod +x mvnw
 # Build the project (skip tests for faster build)
 RUN ./mvnw clean package -DskipTests
 
-# Expose the port your Spring Boot app will run on
+# Expose default port (optional, Render uses $PORT anyway)
 EXPOSE 8080
 
-# Run the jar (matches finalName in pom.xml)
-CMD ["java", "-jar", "target/app.jar"]
+# Run the jar using Render's dynamic PORT environment variable
+CMD ["sh", "-c", "java -Dserver.port=$PORT -jar target/app.jar"]
